@@ -9,5 +9,5 @@ For aesthetics I take inspiration from the old game and watch games.
 
 The game will be a puzzle/action/turn-based rpg/platformer... this might be too much...
 
-The setting might be the wild west (or something), the player wakes up in a cell room from which he/she can escape.
-The player will be able to attack enemies using punches, potions for regaining health must be picked up before use (also: items will be in the game).
+The player wakes up in a cell room from which he/she can escape.
+The player will be able to attack enemies using punches, potions for regaining health must be picked up before use (also: items will be in the game... I think).
