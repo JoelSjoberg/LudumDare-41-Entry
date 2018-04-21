@@ -19,6 +19,5 @@ public class GameStateController : MonoBehaviour {
 	void Update () {
         totalTime = (1/ operationsPerSec % totalTime == 1 / operationsPerSec) ? (totalTime = 0) : (totalTime += Time.deltaTime);
         execute = totalTime == 0;
-        Debug.Log(execute);
 	}
 }

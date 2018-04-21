@@ -9,22 +9,23 @@ public class MovementScript : MonoBehaviour {
     private int stepCounter = 0;
     private int[] sequence = {0, 1, 0, 2};
     private int sequenceCounter = 0;
+
+    private RaycastHit hit;
+    private int dist;
+    private Vector3 dir;
     float lastUpdate = 0;
     int inputCounter = 0;
 
+    public enum States {
+        idle, 
+        step,
+        crouch
+    }
+
+    private States state = States.idle;
     Animator anim;
     AudioController ac;
     SpriteRenderer ren;
-    public enum State
-    {
-        idle,
-        walkLeft,
-        walkRight,
-        jump,
-        fall,
-        grab,
-        attack
-    }
 
 	// Use this for initialization
 	void Start () {
@@ -32,69 +33,108 @@ public class MovementScript : MonoBehaviour {
         anim = GetComponentInChildren<Animator>();
         ren = GetComponentInChildren<SpriteRenderer>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
-        // in the future: find a better way to manipulate the animator! This is insane!!!
-        if(lastUpdate == 1)
-        {
-            anim.SetBool("NoInput", true);
-            
-            lastUpdate = 0;
+    // in the future: find a better way to manipulate the animator! This is insane!!!
+    // Update is called once per frame
+    private float lastInput = 0;
+    void Update () {
+        
+        switch(state) {
+            case (States.idle):
+                idle();
+                break;
+
+            default:
+                idle();
+                break;
         }
-        if (Input.GetKeyDown(KeyCode.D) && inputCounter == 0)
-        {
-            ren.flipX = false;
-            transform.position += new Vector3(1, 0, 0).normalized;
-            playNext();
-            inputCounter++;
-            anim.SetBool("PressLR2", false);
-            anim.SetBool("PressLR", true);
-        }
-        else if (Input.GetKeyDown(KeyCode.D) && inputCounter == 1)
-        {
-            ren.flipX = false;
-            transform.position += new Vector3(1, 0, 0).normalized;
-            playNext();
-            inputCounter = 0;
-            anim.SetBool("PressLR", false);
-            anim.SetBool("PressLR2", true);
-        }
-        if (Input.GetKeyDown(KeyCode.A) && inputCounter == 0)
-        {
-            ren.flipX = true;
-            transform.position += new Vector3(-1, 0, 0).normalized;
-            playNext();
-            inputCounter++;
-            anim.SetBool("PressLR2", false);
-            anim.SetBool("PressLR", true);
-        }
-        else if (Input.GetKeyDown(KeyCode.A) && inputCounter == 1)
-        {
-            ren.flipX = true;
-            transform.position += new Vector3(-1, 0, 0).normalized;
-            playNext();
-            inputCounter = 0;
-            anim.SetBool("PressLR", false);
-            anim.SetBool("PressLR2", true);
-        }
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
-        {
-            transform.position += new Vector3(0, 1, 0).normalized;
-            playNext();
-        }
-        lastUpdate += Time.deltaTime;
+        lastInput += Time.deltaTime;
+            if (lastInput > 1)
+            {
+                anim.SetBool("PressLR", false);
+                anim.SetBool("PressLR2", false);
+                anim.SetBool("NoInput", true);
+            }
+            if (Input.anyKey){
+                lastInput = 0;
+                anim.SetBool("NoInput", false);
+            }
+            if (Input.GetKeyDown(KeyCode.D) && inputCounter == 0)
+            {
+                ren.flipX = false;
+                transform.position += new Vector3(1, 0, 0).normalized;
+                playNext();
+                inputCounter++;
+                anim.SetBool("PressLR2", false);
+                anim.SetBool("PressLR", true);
+            }
+            else if (Input.GetKeyDown(KeyCode.D) && inputCounter == 1)
+            {
+                ren.flipX = false;
+                transform.position += new Vector3(1, 0, 0).normalized;
+                playNext();
+                inputCounter = 0;
+                anim.SetBool("PressLR", false);
+                anim.SetBool("PressLR2", true);
+            }
+            if (Input.GetKeyDown(KeyCode.A) && inputCounter == 1)
+            {
+                ren.flipX = true;
+                transform.position += new Vector3(-1, 0, 0).normalized;
+                playNext();
+                inputCounter = 0;
+                anim.SetBool("PressLR2", false);
+                anim.SetBool("PressLR", true);
+            }
+            else if (Input.GetKeyDown(KeyCode.A) && inputCounter == 0)
+            {
+                ren.flipX = true;
+                transform.position += new Vector3(-1, 0, 0).normalized;
+                playNext();
+                inputCounter++;
+                anim.SetBool("PressLR", false);
+                anim.SetBool("PressLR2", true);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                anim.SetBool("Crouch", true);
+                
+            }
     }
-    
+
+    float WaitTimer = 0;
+    private bool wait(float t)
+    {
+        WaitTimer += Time.deltaTime;
+        if (WaitTimer >= t)
+        {
+            WaitTimer = 0;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private void idle()
+    {
+        anim.SetBool("NoInput", true);
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            ren.flipX = false;
+            transform.position += new Vector3(1, 0, 0).normalized;
+            playNext();
+            inputCounter++;
+            States = 
+        }
+    }
+
     // Play a 8-bit melody as the player moves, the solution is bad but it works.
     public void playNext()
     {
         ac.play(stepSounds[stepCounter]);
-        sequenceCounter = (sequenceCounter + 1) % 4;
+        sequenceCounter = (sequenceCounter + 1) % sequence.Length;
         stepCounter = sequence[sequenceCounter];
     }
-
-    private int walkSequence = 0;
-
 }
