@@ -7,7 +7,7 @@ public class GameStateController : MonoBehaviour {
     // make all event execute at the same time, inputs are stored in a variable and executed when this class allows it.
 
     public bool execute = false;
-    public int operationsFreq = 1;
+    public float operationsFreq = 1;
     private float totalTime = 0;
 
     public int points = 0;
@@ -31,6 +31,19 @@ public class GameStateController : MonoBehaviour {
             totalTime += Time.deltaTime;
             execute = false;
         }
-        
-	}
+        if (points > 10) {
+            operationsFreq = 1.2f;
+        }
+        if (points > 25)
+        {
+            operationsFreq = 1.5f;
+        }
+        if (points > 40) {
+            operationsFreq = 1.7f;
+        }
+        if (points > 60)
+        {
+            operationsFreq = 2f;
+        }
+    }
 }

@@ -15,6 +15,9 @@ public class MovementScript : MonoBehaviour {
     public int movesAllowedToLeft = 0;
     public int movesAllowedToRight = 7;
 
+    // last second bug fix;
+    public bool hitting = false;
+
     public enum States{
         idle,
         step,
@@ -192,8 +195,10 @@ public class MovementScript : MonoBehaviour {
     private void hit()
     {
         anim.SetBool("Hit", true);
+        hitting = true;
         if (!wait(0.20f))
         {
+            hitting = false;
             state = States.idle;
         }
     }

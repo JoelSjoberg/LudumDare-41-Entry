@@ -10,6 +10,9 @@ public class EnemyController : MonoBehaviour {
     public Transform[] enemies = new Transform[6];
     int hits = 0;
     public GameStateController gsc;
+
+    public Sprite alive, dead;
+    public int growthLimit = 5;
 	// Use this for initialization
 	void Start () {
         // Observe! enemies.Length == enemyStates.Length
@@ -29,6 +32,7 @@ public class EnemyController : MonoBehaviour {
         {
             if (enemies[i].GetComponent<ReactToHit>().hit && enemyStates[i] > 0)
             {
+                if (enemies[i].GetComponent<ReactToHit>().hit == false) GetComponentInChildren<SpriteRenderer>().sprite = dead;
                 enemies[i].GetComponent<ReactToHit>().hit = false;
                 enemyStates[i] = 0;
                 enemies[i].localScale = enemySize * enemyStates[i];
@@ -44,8 +48,8 @@ public class EnemyController : MonoBehaviour {
             {
                 // if grown: keep growing
                 if (enemyStates[i] > 0) enemyStates[i]++;
-                // If equal to 4: bad for the player
-                if (enemyStates[i] == 4)
+                // If equal to growthLimit: bad for the player
+                if (enemyStates[i] == growthLimit)
                 {
                     enemyStates[i] = 0;
                     gsc.points--;
@@ -57,6 +61,7 @@ public class EnemyController : MonoBehaviour {
             randomElement = Random.Range(0, enemyStates.Length);
             if (enemyStates[randomElement] == 0)
             {
+                enemies[randomElement].GetComponentInChildren<SpriteRenderer>().sprite = alive;
                 enemyStates[randomElement]++;
                 enemies[randomElement].localScale *= enemyStates[randomElement];
             }
