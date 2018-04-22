@@ -11,24 +11,21 @@ public class MovementScript : MonoBehaviour {
     private int[] sequence = { 0, 1, 0, 2 };
     private int sequenceCounter = 0;
 
-    int inputCounter = 0;
-    // save if step was left or right (for turning on place)
-    private bool lastStep = true;
-
 
     public int movesAllowedToLeft = 0;
     public int movesAllowedToRight = 7;
 
-    enum States{
+    public enum States{
         idle,
         step,
         step2,
         crouch,
-        punch,
+        charge,
+        hit,
         jump
     }
 
-    private States state = States.idle;
+    public static States state = States.idle;
 
     Animator anim;
     AudioController ac;
@@ -51,6 +48,7 @@ public class MovementScript : MonoBehaviour {
         anim.SetBool("PressLR2", false);
         anim.SetBool("NoInput", false);
         anim.SetBool("Crouch", false);
+        anim.SetBool("Charge", false);
         anim.SetBool("Hit", false);
 
         if (lastInput >= 1)
@@ -79,8 +77,11 @@ public class MovementScript : MonoBehaviour {
             case (States.crouch):
                 crouch();
                 break;
-            case (States.punch):
-                punch();
+            case (States.charge):
+                charge();
+                break;
+            case (States.hit):
+                hit();
                 break;
             default:
                 break;
@@ -121,7 +122,7 @@ public class MovementScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            state = States.punch;
+            state = States.charge;
         }
     }
 
@@ -144,7 +145,7 @@ public class MovementScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            state = States.punch;
+            state = States.charge;
         }
     }
 
@@ -167,7 +168,7 @@ public class MovementScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            state = States.punch;
+            state = States.charge;
         }
     }
 
@@ -180,14 +181,23 @@ public class MovementScript : MonoBehaviour {
         }
     }
 
-    private void punch()
+    private void charge()
     {
-        anim.SetBool("Punch", true);
-        if (!wait(0.25f))
+        anim.SetBool("Charge", true);
+        if (!wait(0.10f))
+        {
+            state = States.hit;
+        }
+    }
+    private void hit()
+    {
+        anim.SetBool("Hit", true);
+        if (!wait(0.20f))
         {
             state = States.idle;
         }
     }
+
 
     public void moveLeft()
     {
@@ -195,14 +205,10 @@ public class MovementScript : MonoBehaviour {
         playNext();
         if (movesAllowedToLeft > 0)
         {
-            if (!lastStep)
-            {
-                transform.position += new Vector3(-1, 0, 0).normalized;
-                movesAllowedToRight++;
-                movesAllowedToLeft--;
-            }
+            transform.position += new Vector3(-1, 0, 0).normalized;
+            movesAllowedToRight++;
+            movesAllowedToLeft--;
         }
-        lastStep = false;
     }
 
     public void moveRight()
@@ -211,14 +217,10 @@ public class MovementScript : MonoBehaviour {
         playNext();
         if(movesAllowedToRight > 0)
         {
-            if (lastStep)
-            {
-                transform.position += new Vector3(1, 0, 0).normalized;
-                movesAllowedToRight--;
-                movesAllowedToLeft++;
-            }
+            transform.position += new Vector3(1, 0, 0).normalized;
+            movesAllowedToRight--;
+            movesAllowedToLeft++;
         }
-        lastStep = true;
     }
 
 

@@ -10,6 +10,5 @@ public class LevelTransitor : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         other.transform.position = destination.position;
-        Debug.Log("Hit");
     }
 }
