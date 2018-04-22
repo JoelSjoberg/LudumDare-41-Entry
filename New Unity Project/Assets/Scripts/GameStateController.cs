@@ -32,7 +32,8 @@ public class GameStateController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //if (sPoints > points) ac.play("fail");
+        // player just lost a point
+        if (sPoints > points) ac.play("fail");
 
         sPoints = points;
 
@@ -44,36 +45,35 @@ public class GameStateController : MonoBehaviour {
         }
         if (!finished)
         {
-        if(totalTime >= 1 / operationsFreq)
-        {
-            totalTime = 0;
-            execute = true;
-            playNext();
-        }
-        else
-        {
-            totalTime += Time.deltaTime;
-            execute = false;
-        }
-        if (points > 10) {
-            operationsFreq = 1.2f;
-        }
-        if (points > 25)
-        {
-            operationsFreq = 1.5f;
-        }
-        if (points > 40) {
-            operationsFreq = 1.7f;
-        }
-        if (points > 60)
-        {
-            operationsFreq = 2f;
-        }
-        if (points > 70)
-        {
-            operationsFreq = 2.2f;
-        }
-
+            if(totalTime >= 1 / operationsFreq)
+            {
+                totalTime = 0;
+                execute = true;
+                playNext();
+            }
+            else
+            {
+                totalTime += Time.deltaTime;
+                execute = false;
+            }
+            if (points > 10) {
+                operationsFreq = 1.2f;
+            }
+            if (points > 25)
+            {
+                operationsFreq = 1.5f;
+            }
+            if (points > 40) {
+                operationsFreq = 1.7f;
+            }
+            if (points > 60)
+            {
+                operationsFreq = 2f;
+            }
+            if (points > 70)
+            {
+                operationsFreq = 2.2f;
+            }
         }
     }
     public void playNext()

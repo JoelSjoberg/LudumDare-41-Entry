@@ -15,6 +15,6 @@ public class ShowStamina : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        st.text = "" + player.stamina;
+        st.text = "Stamina: " + player.stamina;
 	}
 }
