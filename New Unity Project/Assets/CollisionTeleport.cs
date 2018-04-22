@@ -8,7 +8,7 @@ public class CollisionTeleport : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene("LD41");
+        SceneManager.LoadScene("End");
         Debug.Log(name);
     }
     // Use this for initialization

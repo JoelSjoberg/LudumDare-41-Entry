@@ -12,7 +12,7 @@ public class MovementScript : MonoBehaviour {
     private int sequenceCounter = 0;
 
     public int stLimit = 6;
-    private int stamina;
+    public int stamina;
     public int movesAllowedToLeft = 0;
     public int movesAllowedToRight = 7;
 

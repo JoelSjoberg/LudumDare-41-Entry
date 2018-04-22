@@ -11,6 +11,6 @@ public class ShowPoints : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        t.text = ""+GameStateController.sPoints;
+        t.text = ""+GameStateController.sPoints + "/" + GameStateController.sGoal;
 	}
 }

@@ -17,13 +17,17 @@ public class GameStateController : MonoBehaviour {
     private int stepCounter = 0;
     private int[] sequence = { 0, 1, 2, 3};
     private int sequenceCounter = 0;
+    public int goal = 50;
+    public static int sGoal;
+    private bool finished = false;
+    public Transform teleportCube;
 
     AudioController ac;
 
 	// Use this for initialization
 	void Start () {
         ac = FindObjectOfType<AudioSource>().GetComponent<AudioController>();
-
+        sGoal = goal;
     }
 	
 	// Update is called once per frame
@@ -31,8 +35,15 @@ public class GameStateController : MonoBehaviour {
         //if (sPoints > points) ac.play("fail");
 
         sPoints = points;
-        
 
+        if (sPoints == goal && !finished)
+        {
+            ac.play("Victory");
+            finished = true;
+            teleportCube.position = new Vector3(teleportCube.position.x, teleportCube.position.y, -1);
+        }
+        if (!finished)
+        {
         if(totalTime >= 1 / operationsFreq)
         {
             totalTime = 0;
@@ -61,6 +72,8 @@ public class GameStateController : MonoBehaviour {
         if (points > 70)
         {
             operationsFreq = 2.2f;
+        }
+
         }
     }
     public void playNext()
