@@ -45,5 +45,9 @@ public class GameStateController : MonoBehaviour {
         {
             operationsFreq = 2f;
         }
+        if (points > 70)
+        {
+            operationsFreq = 2.2f;
+        }
     }
 }
