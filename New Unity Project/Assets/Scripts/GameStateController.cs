@@ -13,18 +13,31 @@ public class GameStateController : MonoBehaviour {
     public int points = 0;
     public static int sPoints;
 
+    private string[] stepSounds = { "e1", "e2", "e3" , "e4"};
+    private int stepCounter = 0;
+    private int[] sequence = { 0, 1, 2, 3};
+    private int sequenceCounter = 0;
+
+    AudioController ac;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        ac = FindObjectOfType<AudioSource>().GetComponent<AudioController>();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        //if (sPoints > points) ac.play("fail");
+
         sPoints = points;
+        
+
         if(totalTime >= 1 / operationsFreq)
         {
             totalTime = 0;
             execute = true;
+            playNext();
         }
         else
         {
@@ -49,5 +62,11 @@ public class GameStateController : MonoBehaviour {
         {
             operationsFreq = 2.2f;
         }
+    }
+    public void playNext()
+    {
+        ac.play(stepSounds[stepCounter]);
+        sequenceCounter = (sequenceCounter + 1) % sequence.Length;
+        stepCounter = sequence[sequenceCounter];
     }
 }

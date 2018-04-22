@@ -11,9 +11,11 @@ public class MovementScript : MonoBehaviour {
     private int[] sequence = { 0, 1, 0, 2 };
     private int sequenceCounter = 0;
 
-
+    public int stLimit = 6;
+    private int stamina;
     public int movesAllowedToLeft = 0;
     public int movesAllowedToRight = 7;
+
 
     // last second bug fix;
     public bool hitting = false;
@@ -40,6 +42,7 @@ public class MovementScript : MonoBehaviour {
         ac = FindObjectOfType<AudioSource>().GetComponent<AudioController>();
         anim = GetComponentInChildren<Animator>();
         ren = GetComponentInChildren<SpriteRenderer>();
+        stamina = stLimit;
 	}
 
     // in the future: find a better way to manipulate the animator! This is insane!!!
@@ -121,9 +124,10 @@ public class MovementScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
+            ac.play("Crouch");
             state = States.crouch;
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && stamina > 0)
         {
             state = States.charge;
         }
@@ -144,9 +148,10 @@ public class MovementScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
+            ac.play("Crouch");
             state = States.crouch;
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && stamina > 0)
         {
             state = States.charge;
         }
@@ -167,9 +172,10 @@ public class MovementScript : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
+            ac.play("Crouch");
             state = States.crouch;
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && stamina > 0)
         {
             state = States.charge;
         }
@@ -177,15 +183,19 @@ public class MovementScript : MonoBehaviour {
 
     private void crouch()
     {
+        
         anim.SetBool("Crouch", true);
         if(!wait(0.75f))
         {
             state = States.idle;
+            stamina += 3;
+            if (stamina > stLimit) stamina = stLimit;
         }
     }
 
     private void charge()
     {
+        ac.play("Hammer4");
         anim.SetBool("Charge", true);
         if (!wait(0.10f))
         {
@@ -200,6 +210,7 @@ public class MovementScript : MonoBehaviour {
         {
             hitting = false;
             state = States.idle;
+            stamina--;
         }
     }
 
