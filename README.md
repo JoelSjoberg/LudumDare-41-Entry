@@ -6,8 +6,12 @@ For art I am using 2-3 different applications (firealpacha, aseprite, marmoset h
 And for music and sound I am using Lmms (and maybe audacity).
 
 For aesthetics I take inspiration from the old game and watch games.
-
+"""
 The game will be a puzzle/action/turn-based rpg/platformer... this might be too much...
 
 The player wakes up in a cell room from which he/she can escape.
 The player will be able to attack enemies using punches, potions for regaining health must be picked up before use (also: items will be in the game... I think).
+"""
+
+It did not turn into anything like this...
+It is now a game-and-watch wack-a-mole game with resource management (if you can call it that)!
