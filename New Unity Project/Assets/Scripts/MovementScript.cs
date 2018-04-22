@@ -11,11 +11,13 @@ public class MovementScript : MonoBehaviour {
     private int[] sequence = { 0, 1, 0, 2 };
     private int sequenceCounter = 0;
 
-    private RaycastHit hit;
-    private int dist;
-    private Vector3 dir;
-    float lastUpdate = 0;
     int inputCounter = 0;
+    // save if step was left or right (for turning on place)
+    private bool lastStep = true;
+
+
+    public int movesAllowedToLeft = 0;
+    public int movesAllowedToRight = 7;
 
     enum States{
         idle,
@@ -49,7 +51,20 @@ public class MovementScript : MonoBehaviour {
         anim.SetBool("PressLR2", false);
         anim.SetBool("NoInput", false);
         anim.SetBool("Crouch", false);
-        anim.SetBool("Punch", false);
+        anim.SetBool("Hit", false);
+
+        if (lastInput >= 1)
+        {
+            anim.SetBool("NoInput", true);
+            state = States.idle;
+            lastInput = 0;
+        }
+
+        if (!Input.anyKey)
+        {
+            lastInput += Time.deltaTime;
+        }
+        else lastInput = 0;
 
         switch (state) {
             case (States.idle):
@@ -68,10 +83,8 @@ public class MovementScript : MonoBehaviour {
                 punch();
                 break;
             default:
-                idle();
                 break;
         }
-        
     }
 
     float WaitTimer = 0;
@@ -95,16 +108,12 @@ public class MovementScript : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.D))
         {
             state = States.step;
-            ren.flipX = false;
-            transform.position += new Vector3(1, 0, 0).normalized;
-            playNext();
+            moveRight();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             state = States.step;
-            ren.flipX = true;
-            transform.position += new Vector3(-1, 0, 0).normalized;
-            playNext();
+            moveLeft();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -122,16 +131,12 @@ public class MovementScript : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.D))
         {
             state = States.step2;
-            ren.flipX = false;
-            transform.position += new Vector3(1, 0, 0).normalized;
-            playNext();
+            moveRight();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             state = States.step2;
-            ren.flipX = true;
-            transform.position += new Vector3(-1, 0, 0).normalized;
-            playNext();
+            moveLeft();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -149,16 +154,12 @@ public class MovementScript : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.D))
         {
             state = States.step;
-            ren.flipX = false;
-            transform.position += new Vector3(1, 0, 0).normalized;
-            playNext();
+            moveRight();
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             state = States.step;
-            ren.flipX = true;
-            transform.position += new Vector3(-1, 0, 0).normalized;
-            playNext();
+            moveLeft();
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -186,6 +187,38 @@ public class MovementScript : MonoBehaviour {
         {
             state = States.idle;
         }
+    }
+
+    public void moveLeft()
+    {
+        ren.flipX = true;
+        playNext();
+        if (movesAllowedToLeft > 0)
+        {
+            if (!lastStep)
+            {
+                transform.position += new Vector3(-1, 0, 0).normalized;
+                movesAllowedToRight++;
+                movesAllowedToLeft--;
+            }
+        }
+        lastStep = false;
+    }
+
+    public void moveRight()
+    {
+        ren.flipX = false;
+        playNext();
+        if(movesAllowedToRight > 0)
+        {
+            if (lastStep)
+            {
+                transform.position += new Vector3(1, 0, 0).normalized;
+                movesAllowedToRight--;
+                movesAllowedToLeft++;
+            }
+        }
+        lastStep = true;
     }
 
 
