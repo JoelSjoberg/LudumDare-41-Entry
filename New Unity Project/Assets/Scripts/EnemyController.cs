@@ -79,6 +79,13 @@ public class EnemyController : MonoBehaviour {
                 enemies[randomElement].localScale *= enemyStates[randomElement];
             }
         }
-        
+        if (!gsc.execute && gsc.finished)
+        {
+            for (int i = 0; i < enemyStates.Length; i++)
+            {
+                enemyStates[i] = 0;
+                enemies[i].localScale *= enemyStates[i];
+            }
+        }
     }
 }

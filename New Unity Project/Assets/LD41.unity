@@ -895,7 +895,8 @@ MonoBehaviour:
   execute: 0
   operationsFreq: 1
   points: 0
-  goal: 50
+  goal: 10
+  finished: 0
   teleportCube: {fileID: 1802187582}
 --- !u!4 &422402532
 Transform:

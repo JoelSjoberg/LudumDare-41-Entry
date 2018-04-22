@@ -19,7 +19,7 @@ public class GameStateController : MonoBehaviour {
     private int sequenceCounter = 0;
     public int goal = 50;
     public static int sGoal;
-    private bool finished = false;
+    public bool finished = false;
     public Transform teleportCube;
 
     AudioController ac;
@@ -41,6 +41,7 @@ public class GameStateController : MonoBehaviour {
         {
             ac.play("Victory");
             finished = true;
+            execute = false;
             teleportCube.position = new Vector3(teleportCube.position.x, teleportCube.position.y, -1);
         }
         if (!finished)
